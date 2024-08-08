@@ -14,18 +14,18 @@ def login(server: str = "", **kwargs: bool) -> dict[str, Any]:
         raise ValueError(
             "Server {0} is missing username or password property".format(o_svr.name)
         )
-
-    if "includeInfo" in kwargs.keys():
-        query_parameters.append("includeInfo")
+    i_info = str(kwargs.get("includeInfo", "true")).lower()
     endpoint = Endpoint(
         name="login",
         path="/api/user",
         request_method=HTTPMethod.GET,
-        query_parameters=["user", "pass"],
+        query_parameters=["user", "pass", "includeInfo"],
     )
     req = rest_request(o_svr, endpoint)
-    q_args = {"user": o_svr.username, "pass": o_svr.password, "includeInfo":
-    resp = req.call_endpoint("login", user=o_svr.username, pass=o_svr.)
+    q_args = {"user": o_svr.username, "pass": o_svr.password, "includeInfo": i_info}
+    resp = req.call_endpoint("login", **q_args)
+    if check_response(resp):
+        o_svr["token"] = resp.
 
 
 def logout(server: str = "") -> None:
